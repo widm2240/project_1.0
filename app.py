@@ -269,3 +269,35 @@ def querySQL():
 if __name__ == "__main__":
     db_create()
     app.run()
+
+body = request.get_json()
+    params_df = body['action']['params']
+    sepal_length_num = str(json.loads(params_df['sepal_length_num'])['amount'])
+
+    print(sepal_length_num, type(sepal_length_num))
+    query_str = f'''
+        SELECT sepal_length, species FROM iris where sepal_length >= {sepal_length_num}
+    '''
+    
+    engine = create_engine("postgresql://shkegbfeivphah:183a9a9bcd13ff5522b75d240cca5335d21d0f905c1a181d15eddb6f24d39915@ec2-44-209-57-4.compute-1.amazonaws.com:5432/d4oja7hb5806v7", echo = False)
+
+    with engine.connect() as conn:
+        query = conn.execute(text(query_str))
+
+    df = pd.DataFrame(query.fetchall())
+    nrow_num = str(len(df.index))
+    answer_text = nrow_num
+
+    responseBody = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": answer_text + "개 입니다."
+                    }
+                }
+            ]
+        }
+    }
+    return responseBody
