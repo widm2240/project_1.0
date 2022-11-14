@@ -241,7 +241,7 @@ def querySQL():
     query_str = f'''
         SELECT sepal_length, species FROM iris where sepal_length >= {sepal_length_num}
     '''
-
+    
     engine = create_engine("postgresql://upkewotgwcdzpq:1d2c63a3d6f5af6b5293420ceab85d12f396b5898126de19ce0a5337147e4df0@ec2-18-215-41-121.compute-1.amazonaws.com:5432/d6njb4ouuue8kd", echo = False)
 
     with engine.connect() as conn:
@@ -270,34 +270,3 @@ if __name__ == "__main__":
     db_create()
     app.run()
 
-body = request.get_json()
-    params_df = body['action']['params']
-    sepal_length_num = str(json.loads(params_df['sepal_length_num'])['amount'])
-
-    print(sepal_length_num, type(sepal_length_num))
-    query_str = f'''
-        SELECT sepal_length, species FROM iris where sepal_length >= {sepal_length_num}
-    '''
-    
-    engine = create_engine("postgresql://upkewotgwcdzpq:1d2c63a3d6f5af6b5293420ceab85d12f396b5898126de19ce0a5337147e4df0@ec2-18-215-41-121.compute-1.amazonaws.com:5432/d6njb4ouuue8kd", echo = False)
-
-    with engine.connect() as conn:
-        query = conn.execute(text(query_str))
-
-    df = pd.DataFrame(query.fetchall())
-    nrow_num = str(len(df.index))
-    answer_text = nrow_num
-
-    responseBody = {
-        "version": "2.0",
-        "template": {
-            "outputs": [
-                {
-                    "simpleText": {
-                        "text": answer_text + "개 입니다."
-                    }
-                }
-            ]
-        }
-    }
-    return responseBody
