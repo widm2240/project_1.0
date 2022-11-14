@@ -142,15 +142,15 @@ def cals(opt_operator, number01, number02):
     elif opt_operator == "division":
         return number01 / number02
 
-application = Flask(__name__)
+app = Flask(__name__)
 
-@application.route("/")
+@app.route("/")
 def index():
     db_create()
     return "DB Created Done !!!!!!!!!!!!!!!"
 
 ## 카카오톡 텍스트형 응답
-@application.route('/api/sayHello', methods=['POST'])
+@app.route('/api/sayHello', methods=['POST'])
 def sayHello():
     body = request.get_json()
     print(body)
@@ -173,7 +173,7 @@ def sayHello():
 
 
 ## 카카오톡 이미지형 응답
-@application.route('/api/showHello', methods=['POST'])
+@app.route('/api/showHello', methods=['POST'])
 def showHello():
     body = request.get_json()
     print(body)
@@ -196,7 +196,7 @@ def showHello():
     return responseBody
 
 ## 카카오톡 Calculator 계산기 응답
-@application.route('/api/calCulator', methods=['POST'])
+@app.route('/api/calCulator', methods=['POST'])
 def calCulator():
     body = request.get_json()
     print(body)
@@ -230,7 +230,7 @@ def calCulator():
     return responseBody
 
 ## Query 조회
-@application.route('/api/querySQL', methods=['POST'])
+@app.route('/api/querySQL', methods=['POST'])
 def querySQL():
     
     body = request.get_json()
@@ -268,4 +268,4 @@ def querySQL():
 
 if __name__ == "__main__":
     db_create()
-    application.run()
+    app.run()
