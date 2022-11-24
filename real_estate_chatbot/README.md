@@ -1,5 +1,11 @@
 ## 영끌족 부동산 길잡이
 
+### 기간
+- 2022.11.17 ~ 2022.12.02
+### 사용툴
+- Visual Studio Code, Jupyter Notebook, Colab, Oracle SQL, Heroku
+### 팀원
+- Lee, Kim, Jeong
 ### 배경
 - 디지털 환경에 익숙해진 MZ세대들은 편리함과 간편함을 추구하기 때문에 컴퓨터 보다는 휴대폰 사용을 선호합니다.
 - 다른 세대보다 제테크에 관심이 많습니다.
