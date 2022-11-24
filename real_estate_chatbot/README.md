@@ -30,5 +30,4 @@
 
 ### 유의사항
 - 해당 프로젝트는 Heroku를 통해 무료로 진행했으나 2022.11.28. 부로 유료전환으로 인해 만료
-- 아래 이미지를 통해 상세 확인 가능
-<img width="100%" src="https://user-images.githubusercontent.com/115764982/203686602-8061a648-680f-4011-9e89-9e836eec9f6e.JPG">
+- [참조 PDF](/real_estate_chatbot/notice/heroku%20%EB%A7%8C%EB%A3%8C.pdf)
