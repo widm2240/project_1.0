@@ -4,6 +4,14 @@
 - 2022.11.17 ~ 2022.12.02
 ### 사용툴
 - Visual Studio Code, Jupyter Notebook, Colab, Oracle SQL, Heroku
+### 라이브러리
+- gunicorn          20.1.0
+- pandas            1.5.1
+- psycopg2          2.9.5
+- Flask             2.2.2
+- SQLAlchemy        1.4.44
+- buautifulsoup4    4.11.1
+- numpy             1.23.4
 ### 팀원
 - Lee, Kim, Jeong
 ### 배경
@@ -11,3 +19,5 @@
 - 다른 세대보다 제테크에 관심이 많습니다.
 ### 목적
 - 컴퓨터 사용보다 손쉬운 모바일 환경 중 하나인 챗봇을 통해 접근하기 어려운 부동산 정보를 제공합니다.
+
+<img width="40%" src="https://user-images.githubusercontent.com/115764982/203671955-c52d0ddf-0b76-4b31-b0b6-16fea71ff084.png">
