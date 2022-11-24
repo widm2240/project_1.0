@@ -8,13 +8,13 @@
 ### 사용툴
 - Visual Studio Code, Jupyter Notebook, Colab, MySQL, PostgreSQL, Heroku
 ### 라이브러리
-- gunicorn          20.1.0
-- pandas            1.5.1
-- psycopg2          2.9.5
-- Flask             2.2.2
-- SQLAlchemy        1.4.44
-- buautifulsoup4    4.11.1
-- numpy             1.23.4
+- gunicorn__20.1.0
+- pandas__1.5.1
+- psycopg2__2.9.5
+- Flask__2.2.2
+- SQLAlchemy__1.4.44
+- buautifulsoup4__4.11.1
+- numpy__1.23.4
 ### 팀원
 - Lee, Kim, Jeong
 ### 배경
