@@ -24,7 +24,7 @@
 - 컴퓨터 사용보다 손쉬운 모바일 환경 중 하나인 챗봇을 통해 접근하기 어려운 부동산 정보를 제공합니다.
 ### 영상
 - 유튜브_부동산뉴스 : <https://youtu.be/awkQyPooWlA>
-- 유튜브_신청자격 : <https://youtu.be/ibZtP0mG4c0>
+- 유튜브_안심전환대출_신청자격 : <https://youtu.be/ibZtP0mG4c0>
 ### 이미지
 <img width="20%" src="https://user-images.githubusercontent.com/115764982/203671955-c52d0ddf-0b76-4b31-b0b6-16fea71ff084.png">
 
