@@ -29,5 +29,5 @@
 <img width="20%" src="https://user-images.githubusercontent.com/115764982/203671955-c52d0ddf-0b76-4b31-b0b6-16fea71ff084.png">
 
 ### 유의사항
-- 해당 프로젝트는 Heroku를 통해 무료로 진행했으나 2022.11.28. 부로 유료전환으로 인해 만료
-- [참조 PDF](/real_estate_chatbot/notice/heroku%20%EB%A7%8C%EB%A3%8C.pdf)
+- 해당 프로젝트는 Heroku 무료로 활용했으나 2022.11.28. 부로 유료전환으로 인해 만료되었습니다.
+- [PDF](/real_estate_chatbot/notice/heroku%20%EB%A7%8C%EB%A3%8C.pdf)를 통해 확인 가능합니다.
