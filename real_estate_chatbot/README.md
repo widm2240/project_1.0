@@ -1,9 +1,12 @@
+# 챗봇 서비스
 ## 영끌족 부동산 길잡이
 
+### 활용 플랫폼
+- 카카오 i 오픈 빌더 : <https://business.kakao.com/info/chatbot/>
 ### 기간
 - 2022.11.17 ~ 2022.12.02
 ### 사용툴
-- Visual Studio Code, Jupyter Notebook, Colab, Oracle SQL, Heroku
+- Visual Studio Code, Jupyter Notebook, Colab, MySQL, PostgreSQL, Heroku
 ### 라이브러리
 - gunicorn          20.1.0
 - pandas            1.5.1
@@ -24,3 +27,7 @@
 - 유튜브_신청자격 : <https://youtu.be/ibZtP0mG4c0>
 ### 이미지
 <img width="20%" src="https://user-images.githubusercontent.com/115764982/203671955-c52d0ddf-0b76-4b31-b0b6-16fea71ff084.png">
+
+### 유의사항
+- 해당 프로젝트는 Heroku를 통해 무료로 진행했으나 2022.11.28. 부로 유료전환으로 인해 만료
+- [참조 PDF](https://github.com/widm2240/project_1.0/files/10080450/heroku.pdf)
