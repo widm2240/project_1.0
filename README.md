@@ -56,8 +56,8 @@
 - [최종PDF](/real_estate_chatbot/Final/real_estate_chatbot.pdf)
 
 ### 자바 프로젝트
-- 폴더명 : [real estate chatbot](/real_estate_chatbot/)
-- 기간 : 2022.11.17 ~ 2022.12.02
-- 사용언어 : Python
-- 내용 : MZ세대를 위한 부동산 정보 제공
-- [최종PDF](/real_estate_chatbot/Final/real_estate_chatbot.pdf)
+- 폴더명 : [seoul_republic_bicycle_travel](/seoul_republic_bicycle_travel/)
+- 기간 : 2022.12.19 ~ 2023.02.01
+- 사용언어 : JAVA
+- 내용 : 외국인을 대상으로 한 서울 공공자전거'따릉이'. 테마여행
+- [최종PDF](/seoul_republic_bicycle_travel/Final/seoul_republic_bicycle_travel.pdf)
