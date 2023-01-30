@@ -1,0 +1,19 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<th:block th:replace="layout/fragments/head :: headFragment(title='Answer')"></th:block>
+<th:block th:replace="layout/fragments/sidebar :: sidebarFragment(current='Answer')"></th:block>
+
+<div layout:fragment="content" class="container">
+    <h5 class="my-3 border-bottom pb-2">Modify Answer</h5>
+    <form th:object="${answerForm}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div th:replace="~{form_errors :: formErrorsFragment"></div>
+        <div class="mb-3">
+            <label for="content" class="form-label">Content</label>
+            <textarea th:field="*{content}" class="form-control" rows="10"></textarea>
+        </div>
+        <input type="submit" value="Save" class="btn btn-primary my-2">
+    </form>
+</div>
+<th:block th:replace="layout/fragments/script :: scriptFragment"></th:block>
+</html>

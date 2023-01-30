@@ -1,0 +1,267 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <th:block th:replace="layout/fragments/head :: headFragment(title='Create a Daily Course')"></th:block>
+      <!-- 사이드바 -->
+    <th:block th:replace="layout/fragments/sidebar :: sidebarFragment(current='Create a Daily Course')"></th:block>
+    <style>
+        #center{
+          width: 100%;
+        }
+        #main{
+            width:70%;
+            float:left;
+            text-align: center;
+        }
+        #side{
+            width:30%;
+            float:right;
+            text-align: center;
+        }
+      </style>
+    <th:block layout:fragment="content" class="container my-3">
+        <div id="center" th:each="item : ${detail}">
+            <div id="main" >
+                <div id="capture_area" >
+                    <h2 class="fw-bold">My Course</h2>
+                    <tr class="text-center" >
+                        <span class="badge rounded-pill text-bg-danger">Start!</span>
+                        <td th:text="${item.name1}">no1</td>
+                        &nbsp;&nbsp;
+                        <td th:text="${item.name2} ">no2</td>
+                        &nbsp;&nbsp;
+                        <td th:text="${item.name3} ">no3</td>
+                        &nbsp;&nbsp;
+                        <td th:text="${item.name4} ">no4</td>
+                        &nbsp;&nbsp;
+                        <td th:text="${item.name5} ">no5</td>
+                        <br>
+                        <br>
+                    </tr>
+                </div>
+                        
+            </div>  
+            <div id="side">
+                <br>
+                <button type="button" id="btn_download" class="btn btn-light"><img src="/images/1904659-arrow-backup-down-download-save-storage-transfer_122509.png" style="width:30px; height:30px;"></button>
+                <form th:action="@{|/rental/delete/${item.id}|}" method="GET">
+                    <input type="submit" id="removebtn" name="removebtn" class="btn btn-danger" value="Course Remove">    
+                </form> 
+            </div>
+        </div>
+        
+            
+        
+        
+        <!-- <a th:href="@{|/rental/delete/${item.id}|}" class="btn btn-danger" value="Course Remove"></a> -->
+        <!-- <input type="submit" id="removebtn" name="removebtn" class="btn btn-danger" value="Course Remove" onclick="location_remove();"> -->
+        <br>
+        
+        <!-- //지도 API 사용 -->
+        <div id="map" style="width:100%; height:1000px;"></div>
+    
+        
+
+        <th:block th:replace="layout/fragments/script :: scriptFragment"></th:block>
+    </th:block>
+
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=75ojy30gbk "></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script  th:inline="javascript">
+
+$(function() {
+        
+    initMap();
+        
+});
+$(function(){
+    $("#btn_download").click(function(e){
+        html2canvas(document.getElementById("capture_area")).then(function(canvas) {
+            var el = document.createElement("a")
+            el.href = canvas.toDataURL("image/jpeg")
+            el.download = 'course.jpg' //다운로드 할 파일명 설정
+            el.click()
+        })
+    })
+});
+    
+    
+function initMap() { 
+    var bicycleLayer = new naver.maps.BicycleLayer();
+    
+    /*<![CDATA[*/
+    /*[# th:each="tmp : ${detail}"]*/
+    noti(/*[[${tmp.name1}]]*/, /*[[${tmp.lat1}]]*/ , /*[[${tmp.lng1}]]*/, /*[[${tmp.name2}]]*/ , /*[[${tmp.lat2}]]*/ , /*[[${tmp.lng2}]]*/, /*[[${tmp.name3}]]*/ , /*[[${tmp.lat3}]]*/ , /*[[${tmp.lng3}]]*/, /*[[${tmp.name4}]]*/ , /*[[${tmp.lat4}]]*/ , /*[[${tmp.lng4}]]*/, /*[[${tmp.name5}]]*/ , /*[[${tmp.lat5}]]*/ , /*[[${tmp.lng5}]]*/)
+    /*[/]*/
+    /*]]>*/
+    
+    function noti(name1, lat1, lng1, name2, lat2, lng2, name3, lat3, lng3, name4, lat4, lng4, name5, lat5, lng5){
+            console.log(name1, lat1, lng1, name2, lat2, lng2, name3, lat3, lng3, name4, lat4, lng4, name5, lat5, lng5);
+            var areaArr = new Array();  // 지역을 담는 배열 ( 지역명/위도경도 )
+            areaArr.push(
+                
+            {location : name1 , lat : lng1 , lng : lat1},  
+            {location : name2 , lat : lng2 , lng : lat2},  
+            {location : name3 , lat : lng3 , lng : lat3},  
+            {location : name4 , lat : lng4 , lng : lat4},  
+            {location : name5 , lat : lng5 , lng : lat5} 
+            
+            );
+            //본인 위치 표시
+            var position = new naver.maps.LatLng(lng1, lat1);
+
+            var map = new naver.maps.Map('map', {
+            center: position,
+            zoom: 14
+            });
+            bicycleLayer.setMap(map);
+            for (var i = 0; i < areaArr.length; i++) {
+                // 지역을 담은 배열의 길이만큼 for문으로 마커와 정보창을 채워주자 !
+
+                var marker = new naver.maps.Marker({
+                    map: map,
+                    title: areaArr[i].location, // 지역구 이름 
+                    position: new naver.maps.LatLng(areaArr[i].lat , areaArr[i].lng) // 지역구의 위도 경도 넣기 
+                });
+                
+            }
+            // var polylinePath = [
+            //             new naver.maps.LatLng(lng1, lat1),
+            //             new naver.maps.LatLng(lng2, lat2),
+            //             new naver.maps.LatLng(lng3, lat3),
+            //             new naver.maps.LatLng(lng4, lat4),
+            //             new naver.maps.LatLng(lng5, lat5)
+            //         ];
+            // var polyline = new naver.maps.Polyline({
+            //                 path: polylinePath,      //선 위치 변수배열
+            //                 strokeColor: '#FF0000', //선 색 빨강 #빨강,초록,파랑
+            //                 strokeOpacity: 0.8, //선 투명도 0 ~ 1
+            //                 strokeWeight: 6,   //선 두께
+            //                 map: map           //오버레이할 지도
+            //             });
+            
+            if(lng3 == "" && lng4 == "" && lng5 == ""){
+                var polylinePath = [
+                    new naver.maps.LatLng(lng1, lat1),
+                    new naver.maps.LatLng(lng2, lat2)
+                ];
+                var polyline = new naver.maps.Polyline({
+                        path: polylinePath,      //선 위치 변수배열
+                        strokeColor: '#FF0000', //선 색 빨강 #빨강,초록,파랑
+                        strokeOpacity: 0.8, //선 투명도 0 ~ 1
+                        strokeWeight: 3,   //선 두께
+                        map: map           //오버레이할 지도
+                    }); 
+            }
+            else if(lng4 == "" && lng5 == ""){
+                var polylinePath = [
+                        new naver.maps.LatLng(lng1, lat1),
+                        new naver.maps.LatLng(lng2, lat2),
+                        new naver.maps.LatLng(lng3, lat3)
+                    ];
+                    var polyline = new naver.maps.Polyline({
+                            path: polylinePath,      //선 위치 변수배열
+                            strokeColor: '#FF0000', //선 색 빨강 #빨강,초록,파랑
+                            strokeOpacity: 0.8, //선 투명도 0 ~ 1
+                            strokeWeight: 3,   //선 두께
+                            map: map           //오버레이할 지도
+                        });
+            }
+            else if(lng5 == ""){
+                var polylinePath = [
+                        new naver.maps.LatLng(lng1, lat1),
+                        new naver.maps.LatLng(lng2, lat2),
+                        new naver.maps.LatLng(lng3, lat3),
+                        new naver.maps.LatLng(lng4, lat4)
+                    ];
+                    var polyline = new naver.maps.Polyline({
+                            path: polylinePath,      //선 위치 변수배열
+                            strokeColor: '#FF0000', //선 색 빨강 #빨강,초록,파랑
+                            strokeOpacity: 0.8, //선 투명도 0 ~ 1
+                            strokeWeight: 3,   //선 두께
+                            map: map           //오버레이할 지도
+                        });
+            }
+            else{
+                var polylinePath = [
+                        new naver.maps.LatLng(lng1, lat1),
+                        new naver.maps.LatLng(lng2, lat2),
+                        new naver.maps.LatLng(lng3, lat3),
+                        new naver.maps.LatLng(lng4, lat4),
+                        new naver.maps.LatLng(lng5, lat5)
+                    ];
+                    var polyline = new naver.maps.Polyline({
+                            path: polylinePath,      //선 위치 변수배열
+                            strokeColor: '#FF0000', //선 색 빨강 #빨강,초록,파랑
+                            strokeOpacity: 0.8, //선 투명도 0 ~ 1
+                            strokeWeight: 3,   //선 두께
+                            map: map           //오버레이할 지도
+                        });
+            }
+            
+            // var marker1 = new naver.maps.Marker({
+	        // map: map,
+	        // title: name1, // 지역구 이름 
+	        // position: new naver.maps.LatLng(lat1 , lng1), // 지역구의 위도 경도 넣기 
+            // icon: {
+            // url: 'https://navermaps.github.io/maps.js.ncp/docs/img/example/ico_pin.jpg',
+            // size: new naver.maps.Size(25, 34),
+            // scaledSize: new naver.maps.Size(25, 34),
+            // origin: new naver.maps.Point(0, 0),
+            // anchor: new naver.maps.Point(12, 34)
+            //     }
+	        // });
+            // var marker2 = new naver.maps.Marker({
+	        // map: map,
+	        // title: name2, // 지역구 이름 
+	        // position: new naver.maps.LatLng(lat2 , lng2), // 지역구의 위도 경도 넣기 
+            // icon: {
+            // url: 'https://navermaps.github.io/maps.js.ncp/docs/img/example/ico_pin.jpg',
+            // size: new naver.maps.Size(25, 34),
+            // scaledSize: new naver.maps.Size(25, 34),
+            // origin: new naver.maps.Point(0, 0),
+            // anchor: new naver.maps.Point(12, 34)
+            //     }
+	        // });
+            // var marker3 = new naver.maps.Marker({
+	        // map: map,
+	        // title: name3, // 지역구 이름 
+	        // position: new naver.maps.LatLng(lat3 , lng3), // 지역구의 위도 경도 넣기 
+            // icon: {
+            // url: 'https://navermaps.github.io/maps.js.ncp/docs/img/example/ico_pin.jpg',
+            // size: new naver.maps.Size(25, 34),
+            // scaledSize: new naver.maps.Size(25, 34),
+            // origin: new naver.maps.Point(0, 0),
+            // anchor: new naver.maps.Point(12, 34)
+            //     }
+	        // });
+            // var marker4 = new naver.maps.Marker({
+	        // map: map,
+	        // title: name4, // 지역구 이름 
+	        // position: new naver.maps.LatLng(lat4 , lng4), // 지역구의 위도 경도 넣기 
+            // icon: {
+            // url: 'https://navermaps.github.io/maps.js.ncp/docs/img/example/ico_pin.jpg',
+            // size: new naver.maps.Size(25, 34),
+            // scaledSize: new naver.maps.Size(25, 34),
+            // origin: new naver.maps.Point(0, 0),
+            // anchor: new naver.maps.Point(12, 34)
+            //     }
+	        // });
+            // var marker5 = new naver.maps.Marker({
+	        // map: map,
+	        // title: name5, // 지역구 이름 
+	        // position: new naver.maps.LatLng(lat5 , lng5), // 지역구의 위도 경도 넣기 
+            // icon: {
+            // url: 'https://navermaps.github.io/maps.js.ncp/docs/img/example/ico_pin.jpg',
+            // size: new naver.maps.Size(25, 34),
+            // scaledSize: new naver.maps.Size(25, 34),
+            // origin: new naver.maps.Point(0, 0),
+            // anchor: new naver.maps.Point(12, 34)
+            //     }
+	        // });
+        }
+
+        
+        
+}
+</script>
+</html>
