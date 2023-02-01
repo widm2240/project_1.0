@@ -1,0 +1,189 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      
+<th:block th:replace="layout/fragments/head :: headFragment(title='Rental Office')"></th:block>
+<!-- 사이드바 -->
+<th:block th:replace="layout/fragments/sidebar :: sidebarFragment(current='Rental Office')"></th:block>
+<link rel="stylesheet" href="/css/Forum.css" media="screen">
+<link rel="stylesheet" href="/css/mdb.min.forum.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
+<style>
+  #info{
+    text-align: right;
+  }
+  
+</style>
+<th:block layout:fragment="content" class="container my-3">
+  
+    <form th:action="@{/rental/rental_office}" method="GET">
+      <section class="u-align-center u-clearfix u-palette-2-light-1 u-section-1" id="carousel_12c2">
+        <div class="u-clearfix u-sheet u-sheet-1">
+          <h2 class="u-align-center u-custom-font u-font-montserrat u-text u-text-body-alt-color u-text-1"> The location of Rental_Office & Number of Holder</h2>
+          <br>
+            
+              <form th:action="@{/rental/rental_office}" method="GET">
+                
+                  <input type="text" th:value="${keyword}" placeholder="Rental_Office Search" id="keyword" name="keyword" class="u-grey-5 u-input u-input-rectangle u-radius-20" required="">
+                  
+                  <input type="submit" value="Find" class="u-border-none u-btn u-btn-round u-btn-submit u-button-style u-palette-2-base u-radius-20 u-btn-1" id="btn_search" >
+                
+              </form>
+          <br>
+          <div id="info">
+            <img src="/images/bicyclemarker.png" style="width:50px; height:55px;"> <strong>: Rental_office</strong> 
+            <img src='https://navermaps.github.io/maps.js.ncp/docs/img/example/sally.png'> <strong>: My Location</strong> 
+            <br>
+
+          </div>
+          
+        </div>
+      </section> 
+        
+          
+          <table class="table">
+            <thead class="table-light">
+                <tr class="text-center">
+                  <th style="width:40%;">Rental_Office</th>
+                  <th>Number of Holder_LCD</th>
+                  <th>Number of Holder_QR</th>
+                  
+                </tr>
+            </thead>
+            <tbody>
+              <tr class="text-center" th:each="item : ${place}">
+                <td th:text="${item.placename}">no1</td>
+                <td th:text="${item.Holder_LCD} ">LCD</td>
+                <td th:text="${item.Holder_QR} ">QR</td>
+              </tr>
+            </tbody> 
+          </table>
+          <br>
+          <div id="section">
+            <div id="side1"></div>
+            <div id="map" style="width:100%; height:900px;"></div>
+            <div id="side2"></div>
+          </div>
+          
+          
+          
+
+        
+      
+
+    </form>
+    <th:block th:replace="layout/fragments/script :: scriptFragment"></th:block>
+</th:block>
+<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5bv_f-dUTVo2dIeicLVVJ2ILIlPQL6Xo&language=en&callback=initMap"></script>
+<script  th:inline="javascript">
+	
+  $(function() {
+    
+    initMap();
+    
+  });
+  
+  function initMap() { 
+
+    
+    let markers = new Array(); // 마커 정보를 담는 배열
+    let infoWindows = new Array(); // 정보창을 담는 배열
+
+
+    var map = new google.maps.Map(document.getElementById("map"), {
+      center: { lat: 37.52251816, lng: 126.9072189 },
+      zoom: 15
+    });
+
+    /*<![CDATA[*/
+    /*[# th:each="tmp : ${offices}"]*/
+	  noti(/*[[${tmp.placename}]]*/, /*[[${tmp.latitude}]]*/, /*[[${tmp.longitude}]]*/); //여기 Argument expression expected. 에러 무시해도 됩니다.
+	  /*[/]*/
+	  /*]]>*/
+    
+    function noti(numValue, latValue, lngValue){
+      var marker = new google.maps.Marker({
+	        map: map,
+	        title: numValue, // 지역구 이름 
+	        position: new google.maps.LatLng(latValue , lngValue), // 지역구의 위도 경도 넣기 
+          icon: {
+          url: '/images/bicyclemarker.png',
+          size: new google.maps.Size(40, 40),
+          scaledSize: new google.maps.Size(40, 40),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(12, 34)
+        }
+	    });
+      
+      //정보창
+      Title = marker.getTitle();
+      var contentString = [
+        '<div class="iw_inner">',
+        '   <h5>' + Title + '</h5>',
+        '</div>'
+          ].join('');
+
+      var infowindow = new google.maps.InfoWindow({
+          content: contentString
+      });
+
+      marker.addListener("click", () => {
+        infowindow.open({
+          anchor: marker,
+          map,
+        });
+        position = marker.getPosition();
+        console.log(Title, position.lat(), position.lng());
+        map.panTo(marker.getPosition());
+  
+      });
+      
+    }
+     /*<![CDATA[*/
+    /*[# th:each="tmp : ${place}"]*/
+	  noti2(/*[[${tmp.placename}]]*/, /*[[${tmp.Latitude}]]*/, /*[[${tmp.Longitude}]]*/); //여기 Argument expression expected. 에러 무시해도 됩니다.
+	  /*[/]*/
+	  /*]]>*/
+
+    function noti2(numValue,latValue, lngValue){
+      var position = new google.maps.LatLng(latValue, lngValue);
+      var markerOptions = {
+          position: position,
+          center: position,
+          title: numValue,
+          map: map,
+          icon: {
+            url: 'https://navermaps.github.io/maps.js.ncp/docs/img/example/sally.png',
+            size: new google.maps.Size(50, 52),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(25, 26)
+          }
+      };
+
+      var marker = new google.maps.Marker(markerOptions);
+      //정보창
+      Title = marker.getTitle();
+      var contentString = [
+        '<div class="iw_inner">',
+        '   <h5>' + Title + '</h5>',
+        '</div>'
+          ].join('');
+
+      var infowindow = new google.maps.InfoWindow({
+          content: contentString
+      });
+      marker.addListener("click", () => {
+        infowindow.open({
+          anchor: marker,
+          map,
+        });
+        map.panTo(marker.getPosition());
+      });
+
+    }
+
+   
+  }
+	
+
+</script>
+</html>

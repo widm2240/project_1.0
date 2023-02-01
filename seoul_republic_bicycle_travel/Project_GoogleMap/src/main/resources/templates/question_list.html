@@ -1,0 +1,246 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      >
+<th:block th:replace="layout/fragments/head :: headFragment(title='Forum')"></th:block>
+<th:block th:replace="layout/fragments/sidebar :: sidebarFragment(current='Forum')"></th:block>
+<link rel="stylesheet" href="/css/Forum.css" media="screen">
+<link rel="stylesheet" href="/css/mdb.min.forum.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css" integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
+
+<body class="u-body u-xl-mode" data-lang="en">
+    <section class="u-align-center u-clearfix u-palette-2-light-1 u-section-1" id="carousel_12c2">
+        <div class="u-clearfix u-sheet u-sheet-1">
+          <h2 class="u-align-center u-custom-font u-font-montserrat u-text u-text-body-alt-color u-text-1"> Free to share Bike Courses and Q&amp;A.</h2>
+          <div class="u-form u-radius-50 u-white u-form-1">
+            <form action="https://forms.nicepagesrv.com/v2/form/process" class="u-clearfix u-form-horizontal u-form-spacing-10 u-inner-form" source="email" name="form" style="padding: 32px;">
+              
+                <div class="u-form-group u-form-name u-label-none">
+                <label for="name-6796" class="u-label">Search</label>
+                <input type="text" th:value="${kw}" placeholder="Search Title" id="search_kw" name="Search" class="u-grey-5 u-input u-input-rectangle u-radius-20" required="">
+              </div>
+              <div class="u-align-left u-form-group u-form-submit u-label-none">
+                <a href="#" class="u-border-none u-btn u-btn-round u-btn-submit u-button-style u-palette-2-base u-radius-20 u-btn-1">Find</a>
+                <input type="submit" value="submit" class="u-form-control-hidden" id="btn_search">
+              </div>
+            </form>
+          </div>
+        </div>
+      </section> 
+</body>
+
+
+<div layout:fragment="content" class="my-3">
+<div>
+<div class="main-body p-0">
+    <div class="inner-wrapper">
+        <!-- Inner sidebar -->
+        <div class="inner-sidebar">
+            <!-- Inner sidebar header -->
+            <div class="inner-sidebar-header justify-content-center">
+                <a th:href="@{/question/create}" class="btn btn-primary has-icon btn-block" type="button" data-toggle="modal" data-target="#threadModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus mr-2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    NEW DISCUSSION
+                  </a>
+            </div>
+            <!-- /Inner sidebar header -->
+
+            <!-- Inner sidebar body -->
+            <div class="inner-sidebar-body p-0">
+                <div class="p-3 h-100" data-simplebar="init">
+                    <div class="simplebar-wrapper" style="margin: -16px;">
+                        <div class="simplebar-height-auto-observer-wrapper">
+                            <div class="simplebar-height-auto-observer"></div>
+                        </div>
+                        <div class="simplebar-mask">
+                            <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                <div class="simplebar-content-wrapper" style="height: 100%; overflow: hidden scroll;">
+                                    <div class="simplebar-content" style="padding: 16px;">
+                                        <ul class="nav nav-pills nav-gap-y-1 flex-column" id="myPill" role="tablist">
+                                            <li class="nav-item" role="presentation">
+                                            <button id="Lately-pill" data-bs-toggle="pill" data-bs-target="#Lately" type="button" role="tab" aria-controls="Lately" aria-selected="true" class="nav-link nav-link-faded has-icon active">Lately</button>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                            <button id="Outdated-pill" data-bs-toggle="pill" data-bs-target="#Outdated" type="button" role="tab" aria-controls="Outdated" aria-selected="false" class="nav-link nav-link-faded has-icon">Outdated</button>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                            <button id="Popular-pill" data-bs-toggle="pill" data-bs-target="#Popular" type="button" role="tab" aria-controls="Popular" aria-selected="false" class="nav-link nav-link-faded has-icon">Popular</button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Inner sidebar body -->
+        </div>
+        <!-- /Inner sidebar -->
+
+        <!-- Inner main -->
+        <div class="inner-main">
+            
+
+            <!-- Inner main body -->
+            <!-- Forum List -->
+            <div class="inner-main-body p-2 p-sm-3 collapse forum-content show">
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="Lately" role="tabpanel" aria-labelledby="Lately-tab">
+                <table class="table">
+                  <thead class="table-dark">
+                      <tr class="text-center">
+                        <th>Number</th>
+                        <th style="width:40%;">Title</th>
+                        <th>Author</th>
+                        <th>Date</th>
+                        <th>Views</th>
+                        <th>Recommendation</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr class="text-center" th:each="question, loop : ${paging}">
+                          <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
+                          <td class="text-start">
+                              <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
+                              <span class="text-danger small ms-2"
+                                  th:if="${#lists.size(question.answerList) > 0}"
+                                  th:text="${#lists.size(question.answerList)}">
+                              </span>
+                          </td>
+                          <td><span th:if="${question.author != null}" th:text="${question.author.username}"></span></td>
+                          <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                          <td th:text="${question.view}"></td>
+                          <td  th:text="${#lists.size(question.voter)}"></td>                
+                      </tr>
+                  </tbody> 
+              </table>
+                </div>
+                    <div class="tab-pane" id="Outdated" role="tabpanel" aria-labelledby="Outdated-tab">
+                        <table class="table">
+                            <thead class="table-dark">
+                                <tr class="text-center">
+                                    <th>Number</th>
+                                    <th style="width:40%;">Title</th>
+                                    <th>Author</th>
+                                    <th>Date</th>
+                                    <th>Views</th>
+                                    <th>Recommendation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center" th:each="question, loop : ${paging2}">
+                                    <td th:text="${loop.count}"></td>
+                                    <td class="text-start">
+                                        <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
+                                        <span class="text-danger small ms-2"
+                                            th:if="${#lists.size(question.answerList) > 0}"
+                                            th:text="${#lists.size(question.answerList)}">
+                                        </span>
+                                    </td>
+                                    <td><span th:if="${question.author != null}" th:text="${question.author.username}"></span></td>
+                                    <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                                    <td th:text="${question.view}"></td>
+                                    <td  th:text="${#lists.size(question.voter)}"></td>
+                                </tr>
+                            </tbody> 
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="Popular" role="tabpanel" aria-labelledby="Popular-tab">
+                        <table class="table">
+                            <thead class="table-dark">
+                                <tr class="text-center">
+                                  <th>Number</th>
+                                  <th style="width:40%;">Title</th>
+                                  <th>Author</th>
+                                  <th>Date</th>
+                                  <th>Views</th>
+                                  <th>Recommendation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center" th:each="question, loop : ${paging3}">
+                                    <td th:text="${paging3.getTotalElements - (paging3.number * paging3.size) - loop.index}"></td>
+                                    <td class="text-start">
+                                        <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
+                                        <span class="text-danger small ms-2"
+                                            th:if="${#lists.size(question.answerList) > 0}"
+                                            th:text="${#lists.size(question.answerList)}">
+                                        </span>
+                                    </td>
+                                    <td><span th:if="${question.author != null}" th:text="${question.author.username}"></span></td>
+                                    <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                                    <td th:text="${question.view}"></td>
+                                    <td th:text="${#lists.size(question.voter)}"></td>
+                                </tr>
+                            </tbody> 
+                        </table>
+                    </div>
+                </div>
+
+        <!-- 페이징처리 시작 -->
+        <div th:if="${!paging.isEmpty()}">
+          <ul class="pagination justify-content-center">
+              <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                  <!-- <a class="page-link" th:href="@{|?page=${paging.number-1}|}"> -->
+                  <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number-1}">
+                      <span>Previous</span>
+                  </a>
+              </li>
+              <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                  th:if="${page >= paging.number-5 and page <= paging.number+5}"
+                  th:classappend="${page == paging.number} ? 'active'"
+                  class="page-item">
+                  <!-- <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a> -->
+                  <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+              </li>
+              <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                  <!-- <a class="page-link" th:href="@{|?page=${paging.number+1}|}"> -->
+                  <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+1}">
+                      <span>Next</span>
+                  </a>
+              </li>
+          </ul>
+        </div>
+      <!-- 페이징처리 끝 -->
+        </div>
+        </div>
+        <!-- /Inner main -->
+        <form th:action="@{/question/list}" method="get" id="searchForm">
+          <input type="hidden" id="kw" name="kw" th:value="${kw}">
+          <input type="hidden" id="page" name="page" th:value="${paging.number}">
+      </form>
+    </div>
+
+    <section class="u-backlink u-clearfix u-grey-80">
+        <p class="u-text">
+          <span>Make with Kim</span>
+        </p>,
+        <p class="u-text">
+            <span>Make with Yee</span>
+        </p>,
+        <p class="u-text">
+            <span>Make with Jung</span>
+        </p>
+      </section>
+
+<script layout:fragment="script" type="text/javascript">
+const page_elements = document.getElementsByClassName("page-link");
+Array.from(page_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        document.getElementById('page').value= this.dataset.page;
+        document.getElementById("searchForm").submit();
+    });
+});
+const btn_search = document.getElementById("btn_search");
+btn_search.addEventListener("click", function() {
+    document.getElementById("kw").value = document.getElementById("search_kw").value;
+    document.getElementById("page").value = 0; // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
+    document.getElementById("searchForm").submit();
+});
+</script>
+<th:block th:replace="layout/fragments/script :: scriptFragment"></th:block>
+</html>

@@ -56,8 +56,8 @@
 - [최종PDF](/real_estate_chatbot/Final/real_estate_chatbot.pdf)
 
 ### 자바 프로젝트
-- 폴더명 : [seoul_republic_bicycle_travel](/seoul_republic_bicycle_travel/)
+- 폴더명 : [seoul_republic_bicycle_travel_project](/seoul_republic_bicycle_travel/)
 - 기간 : 2022.12.19 ~ 2023.02.01
 - 사용언어 : JAVA
 - 내용 : 외국인을 대상으로 한 서울 공공자전거'따릉이'. 테마여행
-- [최종PDF](/seoul_republic_bicycle_travel/Final/seoul_republic_bicycle_travel.pdf)
+- [최종PDF](/seoul_republic_bicycle_travel/Final/Seoul_Republic_Bicycle_Travel_Project.pdf)

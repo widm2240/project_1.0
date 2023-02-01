@@ -1,0 +1,392 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<style>
+  #center{
+    width:100%
+  }
+  #nav{
+    background-color:rgb(255, 255, 255);
+    width:20%;
+    height: 100%;
+    float:left;
+  }
+  #section{
+    width: 80%;
+    text-align: center;
+    float:left;
+    padding: 10px;
+  }
+  #route {
+  position:absolute;
+  top:0;
+  left:0;
+  padding:5px;
+  z-index:10;
+}
+</style>
+<th:block th:replace="layout/fragments/head :: headFragment(title='Create a Daily Course')"></th:block>
+<!-- 사이드바 -->
+<th:block th:replace="layout/fragments/sidebar :: sidebarFragment(current='Create a Daily Course')"></th:block>
+<th:block layout:fragment="content" class="container my-3">
+    <form th:action="@{/rental/mycourse}" method="GET">
+      <div id="center">
+        <div id="nav">
+          <button type="hidden" class="btn btn-light" id="refresh" style="width: 100%;"></button>
+          <br>
+          <br>
+          <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >
+                  My Course-List
+                </button>
+              </h2>
+              
+              <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body" id="content" style="overflow:auto; height:950px;">
+                  <ul class="list-group list-group-flush" id="add_place" th:each="item : ${course}">
+                    <a th:href="@{|/rental/detail/${item.id}|}">check the course</a>
+                    <li class="list-group-item" th:text="${item.name1}">An item</li>
+                    <li class="list-group-item" th:text="${item.name2}">A second item</li>
+                    <li class="list-group-item" th:text="${item.name3}">A third item</li>
+                    <li class="list-group-item" th:text="${item.name4}">A fourth item</li>
+                    <li class="list-group-item" th:text="${item.name5}">And a fifth one</li>
+                    <br>
+                  </ul> 
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          <br>
+          <div class="addBtn" >
+            <button type="button" class="u-border-2 u-border-palette-2-base u-btn u-btn-round u-button-style u-hover-palette-2-base u-none u-radius-6 u-text-body-color u-text-hover-white u-btn-1" id="savebtn" style="width: 100%;" onclick="savedata();">+ Add My Course</button>
+          </div>
+          
+        </div>
+        <div id="section">
+          <h5 style="color:red;">*You can choose up to five locations.*</h5>
+          
+          <!-- //지도 API 사용 -->
+          <div id="map" style="width:100%; height:1150px;">
+            <button id="route" type="button" class="u-border-none u-btn u-btn-round u-btn-submit u-button-style u-palette-2-base u-radius-20 u-btn-1" onClick="window.open('https://map.naver.com/v5/directions/-/-/-/bike?c=15,0,0,0,dh')" >Naver map</button>
+          </div>
+          <div id="info" style="text-align:right;">
+            <img src="/images/bicyclemarker.png" style="width:30px; height:25px;" > <strong>: Rental_office</strong> 
+            <img src='/images/placemarker2.png' style="width:30px; height:25px;"> <strong>: THE SIGHTS</strong> 
+            <img src="https://navermaps.github.io/maps.js.ncp/docs/img/example/sally.png" style="width:20px;height:25px;"> <strong>: My Location</strong>
+          </div>
+        </div>
+      </div>
+        
+    </form>
+    
+    <th:block th:replace="layout/fragments/script :: scriptFragment"></th:block>
+</th:block>
+<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5bv_f-dUTVo2dIeicLVVJ2ILIlPQL6Xo&language=en&callback=initMap"></script>
+<script  th:inline="javascript">
+	
+  $(function() {
+    
+    initMap();
+    
+  });
+
+  function initMap(){
+    let markers = new Array(); // 마커 정보를 담는 배열
+    let infoWindows = new Array(); // 정보창을 담는 배열
+    
+    var map = new google.maps.Map(document.getElementById("map"), {
+      center: { lat: 37.52251816, lng: 126.9072189 },
+      zoom: 16
+    });
+
+     /*[# th:each="seoul : ${places}"]*/
+	  noti2(/*[[${seoul.Designation}]]*/,/*[[${seoul.Latitude}]]*/, /*[[${seoul.Longitude}]]*/); //여기 Argument expression expected. 에러 무시해도 됩니다.
+	  /*[/]*/
+	  /*]]>*/
+    let locations = new Array();
+    let result = new Array();
+
+    function noti2(place, latitude, longitude){
+      var marker = new google.maps.Marker({
+	        map: map,
+	        title: place, // 지역구 이름 
+	        position: new google.maps.LatLng(latitude , longitude), // 지역구의 위도 경도 넣기 
+          icon: {
+          url: '/images/placemarker2.png',
+          size: new google.maps.Size(60, 40),
+          scaledSize: new google.maps.Size(60, 40),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(12, 34)
+        }
+	    });
+      var contentString = [
+      '<div class="test">',
+        '   <input type="button" id="savebtn" name="savebtn" class="btn btn-warning" value="Add" onclick="location_save();">',
+        '   <input type="button" id="removebtn" name="removebtn" class="btn btn-danger" value="Remove" onclick="location_remove();">',
+        '</div>'
+          ].join('');
+
+      var infowindow = new google.maps.InfoWindow({
+          content: contentString
+      });
+
+      marker.addListener("click", () => {
+        infowindow.open({
+          anchor: marker,
+          map,
+        });
+        Title = marker.getTitle();
+        position = marker.getPosition();
+        console.log(Title, position.lat(), position.lng());
+
+        window.location_save = function(){
+          let location = new Array();
+          location.push(Title, position.lat(), position.lng());
+          locations.push(location);
+          // console.log(locations[0][0]);
+          result = locations.reduce((acc, val) => [ ...acc, ...val ], []) // 이중배열 풀기
+          infowindow.close();
+          marker.setIcon('https://navermaps.github.io/maps.js.ncp/docs/img/example/sally.png'); //클릭시 마커 이미지 변경
+          console.log(result);
+        }
+
+        window.location_remove = function(){
+          let location = new Array();
+          location.push(Title, position.lat(), position.lng());
+          for(var i = 0; i < locations.length; i++){
+            for(var j=0; j < locations[i].length; j++){
+              if (locations[i][j] === Title || locations[i][j] === position.lat() || locations[i][j] === position.lng() ) { 
+                locations[i].splice(j, 1); 
+                j--; 
+
+                }
+              
+             }
+    
+          }
+          console.log(location);
+          result = locations.reduce((acc, val) => [ ...acc, ...val ], []) // 이중배열 풀기
+          // console.log(locations[0][0]);
+          infowindow.close();
+          marker.setIcon({
+              url: '/images/placemarker2.png',
+              size: new google.maps.Size(60, 40),
+              scaledSize: new google.maps.Size(60, 40),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(12, 34)
+          }); //클릭시 마커 이미지 변경
+          console.log(result);
+        }
+
+        window.savedata = function(){
+            console.log(result);
+            length = result.length;
+            switch(length){
+              case 3 :
+                  $.get('http://localhost:8080/rental/save',
+                  { "name1" : result[0],
+                  "lat1" : result[1],
+                  "lng1" : result[2],
+                  "name2" : null,
+                  "lat2" : null,
+                  "lng2" : null,
+                  "name3" : null,
+                  "lat3" : null,
+                  "lng3" : null,
+                  "name4" : null,
+                  "lat4" : null,
+                  "lng4" : null,
+                  "name5" : null,
+                  "lat5" : null,
+                  "lng5" : null},
+                    function(){
+                    console.log('성공적으로 실행하였습니다.');
+                  },'json');
+                  break;
+              case 6 :
+                $.get('http://localhost:8080/rental/save',
+                    { "name1" : result[0],
+                    "lat1" : result[1],
+                    "lng1" : result[2],
+                    "name2" : result[3],
+                    "lat2" : result[4],
+                    "lng2" : result[5],
+                    "name3" : null,
+                    "lat3" : null,
+                    "lng3" : null,
+                    "name4" : null,
+                    "lat4" : null,
+                    "lng4" : null,
+                    "name5" : null,
+                    "lat5" : null,
+                    "lng5" : null},
+                      function(){
+                      console.log('성공적으로 실행하였습니다.');
+                    },'json');
+                    break;
+              case 9 : 
+                $.get('http://localhost:8080/rental/save',
+                      { "name1" : result[0],
+                      "lat1" : result[1],
+                      "lng1" : result[2],
+                      "name2" : result[3],
+                      "lat2" : result[4],
+                      "lng2" : result[5],
+                      "name3" : result[6],
+                      "lat3" : result[7],
+                      "lng3" : result[8],
+                      "name4" : null,
+                      "lat4" : null,
+                      "lng4" : null,
+                      "name5" : null,
+                      "lat5" : null,
+                      "lng5" : null},
+                        function(){
+                        console.log('성공적으로 실행하였습니다.');
+                      },'json');
+                      break;
+              case 12 : 
+                $.get('http://localhost:8080/rental/save',
+                        { "name1" : result[0],
+                        "lat1" : result[1],
+                        "lng1" : result[2],
+                        "name2" : result[3],
+                        "lat2" : result[4],
+                        "lng2" : result[5],
+                        "name3" : result[6],
+                        "lat3" : result[7],
+                        "lng3" : result[8],
+                        "name4" : result[9],
+                        "lat4" : result[10],
+                        "lng4" : result[11],
+                        "name5" : null,
+                        "lat5" : null,
+                        "lng5" : null},
+                          function(){
+                          console.log('성공적으로 실행하였습니다.');
+                        },'json');
+                        break;
+              case 15 : 
+                  $.get('http://localhost:8080/rental/save',
+                  { "name1" : result[0],
+                  "lat1" : result[1],
+                  "lng1" : result[2],
+                  "name2" : result[3],
+                  "lat2" : result[4],
+                  "lng2" : result[5],
+                  "name3" : result[6],
+                  "lat3" : result[7],
+                  "lng3" : result[8],
+                  "name4" : result[9],
+                  "lat4" : result[10],
+                  "lng4" : result[11],
+                  "name5" : result[12],
+                  "lat5" : result[13],
+                  "lng5" : result[14]},
+                    function(){
+                    console.log('결과: '+result[0]);
+                      
+                  },'json');
+                  break;
+            }
+
+              //경로 표시
+          switch(length){
+            case 6 : 
+              var polylinePath = [
+                new google.maps.LatLng(result[1], result[2]),
+                new google.maps.LatLng(result[4], result[5])
+              ];
+              var polyline = new google.maps.Polyline({
+                    path: polylinePath,      //선 위치 변수배열
+                    strokeColor: '#FF0000', //선 색 빨강 #빨강,초록,파랑
+                    strokeOpacity: 0.8, //선 투명도 0 ~ 1
+                    strokeWeight: 3,   //선 두께
+                    map: map           //오버레이할 지도
+                });
+              break;
+            case 9 : 
+                var polylinePath = [
+                new google.maps.LatLng(result[1], result[2]),
+                new google.maps.LatLng(result[4], result[5]),
+                new google.maps.LatLng(result[7], result[8])
+                ];
+                var polyline = new google.maps.Polyline({
+                    path: polylinePath,      //선 위치 변수배열
+                    strokeColor: '#FF0000', //선 색 빨강 #빨강,초록,파랑
+                    strokeOpacity: 0.8, //선 투명도 0 ~ 1
+                    strokeWeight: 3,   //선 두께
+                    map: map           //오버레이할 지도
+                });
+                break;
+            case 12 : 
+                var polylinePath = [
+                new google.maps.LatLng(result[1], result[2]),
+                new google.maps.LatLng(result[4], result[5]),
+                new google.maps.LatLng(result[7], result[8]),
+                new google.maps.LatLng(result[10], result[11])
+                ];
+                var polyline = new google.maps.Polyline({
+                    path: polylinePath,      //선 위치 변수배열
+                    strokeColor: '#FF0000', //선 색 빨강 #빨강,초록,파랑
+                    strokeOpacity: 0.8, //선 투명도 0 ~ 1
+                    strokeWeight: 3,   //선 두께
+                    map: map           //오버레이할 지도
+                });
+                break;
+            case 15 : 
+                var polylinePath = [
+                new google.maps.LatLng(result[1], result[2]),
+                new google.maps.LatLng(result[4], result[5]),
+                new google.maps.LatLng(result[7], result[8]),
+                new google.maps.LatLng(result[10], result[11]),
+                new google.maps.LatLng(result[13], result[14])  
+                ];
+                console.log(polylinePath);
+
+                var polyline = new google.maps.Polyline({
+                    path: polylinePath,      //선 위치 변수배열
+                    strokeColor: '#FF0000', //선 색 빨강 #빨강,초록,파랑
+                    strokeOpacity: 0.8, //선 투명도 0 ~ 1
+                    strokeWeight: 3,   //선 두께
+                    map: map           //오버레이할 지도
+                });
+           
+
+            }
+
+            $("#refresh").trigger('click'); 
+        }
+
+
+  
+      });
+
+
+    }
+
+    /*[# th:each="tmp : ${offices}"]*/
+	  noti(/*[[${tmp.latitude}]]*/, /*[[${tmp.longitude}]]*/); //여기 Argument expression expected. 에러 무시해도 됩니다.
+	  /*[/]*/
+	  /*]]>*/
+
+    function noti(latValue, lngValue){
+      var marker = new google.maps.Marker({
+	        map: map,
+	        position: new google.maps.LatLng(latValue , lngValue), // 지역구의 위도 경도 넣기 
+          icon: {
+          url: '/images/bicyclemarker.png',
+          size: new google.maps.Size(40, 40),
+          scaledSize: new google.maps.Size(40, 40),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(12, 34)
+        }
+	    });
+    
+    }
+
+  }
+</script>
+</html>
