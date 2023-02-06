@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lagn="ko" xmlns:th="http://www.thymeleaf.org">
+
+    <!-- Footer -->
+    <th:block th:fragment="footerFragment">
+        <section class="u-backlink u-clearfix u-grey-80">
+            <p class="u-text">
+                <span style="font-size: 11pt;" onClick="youtubeFullscreen('https://youtu.be/8toZAyLGljE?list=PLl-tyiVv1c3Q_2BSR9OYIjzfwtwgxHUNz')">If you're curious about how to use the page, click on it.</span>
+            </p>
+        </section>
+        <script>
+            function youtubeFullscreen(url){
+                    window.open(url,"","fullscreen,scrollbars")
+            }
+        </script>
+    </th:block>
+
+</html>
